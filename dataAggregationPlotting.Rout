@@ -1,0 +1,121 @@
+
+R version 2.15.1 (2012-06-22) -- "Roasted Marshmallows"
+Copyright (C) 2012 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+Platform: x86_64-redhat-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+[Previously saved workspace restored]
+
+> ###########################
+> # this script looks at aggregating data by interesting properties and plotting them
+> ##########################
+> cityTreesDF <- read.delim("cityTreesDF.txt", header=T, sep=";")
+> library(plyr)
+> library(ggplot2)
+> dir.create("Figs")
+> ##################
+> # what is the distribtuion of height class
+> ##################
+> png("Figs/heightClassDistribution.png")
+> p <- ggplot(data=cityTreesDF, 
++             aes(x=HEIGHT_RANGE_ID))
+> p+geom_bar(binwidth=1)
+> dev.off()
+null device 
+          1 
+> 
+> ###################
+> # is diameter assocation with height class?
+> ###################
+> 
+> #drop level 10, because it did not make sense
+> png("Figs/diameterVSHeightClass.png")
+> p <- ggplot(data=cityTreesDF, 
++             aes(x=reorder(HEIGHT_RANGE_ID, DIAMETER, median, order=TRUE), y=DIAMETER))
+> p+geom_boxplot()+xlab("HEIGHT RANGE ID") +ylab("diameter of tree at breast height (inches)")+scale_y_continuous(limits = c(0, 100))+theme(axis.text.x = element_text(angle = 90, hjust = 1))
+Warning message:
+Removed 15 rows containing non-finite values (stat_boxplot). 
+> dev.off()
+null device 
+          1 
+> 
+> #########################
+> # what is the average diameter of trees in each area?
+> #########################
+> summary(cityTreesDF$DIAMETER)### apparently Diameter is in inches-> 2931 inches = 73meter
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+   0.00    3.00    8.25   11.05   16.00 2931.00 
+> #this is kinda rediculous, so order by median instead
+> cityTreesDF[which.max(cityTreesDF$DIAMETER),]
+         NEIGHBOURHOOD_NAME DIAMETER HEIGHT_RANGE_ID year month
+25201 GRANDVIEW - WOODLANDS     2931               6   NA    NA
+> png("Figs/diameterVSNeighbourhood.png")
+> p <- ggplot(data=cityTreesDF, 
++             aes(x=reorder(NEIGHBOURHOOD_NAME, DIAMETER, median, order=TRUE), y=DIAMETER))
+> p+geom_boxplot()+xlab("NEIGHBOURHOOD")  +ylab("diameter of tree at breast height (inches)")+scale_y_continuous(limits = c(0, 100))+theme(axis.text.x = element_text(angle = 90, hjust = 1))
+Warning message:
+Removed 15 rows containing non-finite values (stat_boxplot). 
+> dev.off()
+null device 
+          1 
+> 
+> 
+> #########################
+> # is there correlation between year planted and diameter?
+> #########################
+> #q <- ggplot(data=cityTreesDF,
+>  #      aes(x=year, y=DIAMETER))
+> #q+geom_point(alpha=1/2)+scale_y_continuous(limits = c(0, 100))
+> 
+> (planting_pattern <- count(subset(cityTreesDF, month!="NA"), vars=c("month")))
+   month  freq
+1      1 10710
+2      2 12272
+3      3 11141
+4      4  6086
+5      5  1104
+6      6   469
+7      7   163
+8      8    92
+9      9   124
+10    10  2365
+11    11 11618
+12    12  7976
+> planting_pattern$month <- factor(planting_pattern$month, levels=c(6:12,1:5))
+> 
+> png("Figs/yearlyTreePlanting.png")
+> m <- ggplot(data=subset(cityTreesDF, month!="NA"),aes(x= month))
+> m + geom_bar(binwidth=1)+facet_wrap(~year)# every year the time of planting seem very consistent
+> planting_pattern$month <- (planting_pattern$month)
+> dev.off()
+null device 
+          1 
+> 
+> #################
+> #let's graph this with a sinusoidal curve fitted by glm
+> ################
+> png("Figs/cyclicTrendTreePlanting.png")
+> m <- ggplot(data=planting_pattern,aes(x= month, y=freq, group=1))
+> m + geom_point(binwidth=1) +stat_smooth(geom="smooth",method="glm", formula=y~sin(2*pi/12*x)+cos(2*pi/12*x))
+> dev.off()
+null device 
+          1 
+> 
+> 
+> proc.time()
+   user  system elapsed 
+ 15.332   0.237  15.603 
