@@ -1,12 +1,16 @@
+
 Homework 6-- Read Me
-========================================================
+--------------------
 
 This is the landing page for homework 6.  
 
-1. A snapshop of the directory before the automated make pipe-line can be found here:
+- A snapshop of the directory before the automated make pipe-line can be found here: https://github.com/vmeng321/stat545a-2013-hw06-before
 
-2. The contents required for the automated workflow can be downloaded as a zip file from here:
+- The contents required for the automated workflow can be downloaded as a zip file from here: https://github.com/vmeng321/stat545a-2013-hw06-before/archive/master.zip
 
-3. *Once the directory has been unpacked, please run make from the commandline.*
+- *Once the directory has been unpacked, please run make from the commandline.*  The file Makefile contains the automated procedure for making ReportVanCityTrees.html
 
-4. A snapshop of the directory after everything is done can be found here:
+- The end result of make all is the file [ReportVanCityTrees.html](http://rpubs.com/vmeng321/ReportVanCityTrees) ; This file can also be found in the directory after make.
+
+- A snapshop of the directory after everything is done can be found here: https://github.com/vmeng321/stat545a-2013-hw06-after
+
