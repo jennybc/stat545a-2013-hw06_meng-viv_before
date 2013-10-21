@@ -1,7 +1,7 @@
 ######################
 # this script loads and cleans the data
 ######################
-required_lib =c("plyr")
+required_lib =c("plyr", "knitr", "ggplot2")
 install_required_libs()
 
 install_required_libs<-function(){
@@ -10,6 +10,7 @@ for(i in 1:length(required_lib)){
         {install.packages(required_lib[i])}
 }
 }
+library(plyr)
 
 #locate the files, the City of Vancouver provided separate spreadsheets for each of the neighbourhoods
 csvdir <- "csv_street_trees"
