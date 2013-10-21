@@ -4,7 +4,7 @@
 install_required_libs<-function(){
 for(i in 1:length(required_lib)){
     if(required_lib[i] %in% rownames(installed.packages()) == FALSE)
-        {install.packages(required_lib[i])}
+        {install.packages(required_lib[i], repos="http://cran.stat.sfu.ca/")}
 }
 }
 required_lib =c("plyr", "knitr", "ggplot2")
