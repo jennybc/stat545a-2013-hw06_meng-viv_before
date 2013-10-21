@@ -1,15 +1,14 @@
 ######################
 # this script loads and cleans the data
 ######################
-required_lib =c("plyr", "knitr", "ggplot2")
-install_required_libs()
-
 install_required_libs<-function(){
 for(i in 1:length(required_lib)){
     if(required_lib[i] %in% rownames(installed.packages()) == FALSE)
         {install.packages(required_lib[i])}
 }
 }
+required_lib =c("plyr", "knitr", "ggplot2")
+install_required_libs()
 library(plyr)
 
 #locate the files, the City of Vancouver provided separate spreadsheets for each of the neighbourhoods
