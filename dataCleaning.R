@@ -1,7 +1,15 @@
 ######################
 # this script loads and cleans the data
 ######################
-library("plyr")
+required_lib =c("plyr")
+install_required_libs()
+
+install_required_libs<-function(){
+for(i in 1:length(required_lib)){
+    if(required_lib[i] %in% rownames(installed.packages()) == FALSE)
+        {install.packages(required_lib[i])}
+}
+}
 
 #locate the files, the City of Vancouver provided separate spreadsheets for each of the neighbourhoods
 csvdir <- "csv_street_trees"
